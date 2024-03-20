@@ -30,5 +30,5 @@ echo "Completed the cacert update process"
 
 #Reboot the system  
 echo "Rebooting the system"
-sleep 2 
+sleep 4 
 reboot now
