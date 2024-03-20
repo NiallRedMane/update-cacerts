@@ -1,19 +1,34 @@
 #!/bin/sh
 
-# Change directory to /home/user/pi/Downloads  
-cd /home/user/pi/Downloads
+echo "Starting the cacert update process"  
 
-#if jre1.8.0_401 folder exists, delete it
-rm -rf jre1.8.0_401
+#Change directory to /home/pi/Downloads  
+cd /home/pi/Downloads
+echo "Changed directory to /home/pi/Downloads"  
 
-#Download latest jre
-curl -sL  https://javadl.oracle.com/webapps/download/AutoDL?BundleId=249540_4d245f941845490c91360409ecffb3b4 | tar xz
+#Download cacerts from github
+echo "Downloading updated cacerts"  
+curl -sL https://raw.githubusercontent.com/NiallRedMane/update-cacerts/main/cacerts > /home/pi/Downloads/cacerts
+echo "Download complete." 
 
-#backup the current cacerts to cacert.bak. do not overwrite if bak already exists
+#Backup the current cacerts to cacert.bak. do not overwrite if bak already exists
+echo "Backing up the current cacerts"  
 cp -n /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/jre/lib/security/cacerts /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/jre/lib/security/cacerts.bak
+echo "Backup complete"  
 
 #Copy the latest certs into the jre
-cp /home/pi/Downloads/jre1.8.0_401/lib/security/cacerts /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/jre/lib/security/
+echo "Copying the latest certs into the jre"  
+cp /home/pi/Downloads/cacerts /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/jre/lib/security/
+echo "Copy complete"  
 
-# Reboot the system  
+#Remove downloaded cacerts
+echo "Removing downloaded cacerts"  
+rm /home/pi/Downloads/cacerts
+echo "Removal complete"  
+
+echo "Completed the cacert update process"  
+
+#Reboot the system  
+echo "Rebooting the system"
+sleep 2 
 reboot now
